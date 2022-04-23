@@ -27,6 +27,7 @@ namespace Tournament
 
         private void FansForm_Load(object sender, EventArgs e)
         {
+
             // adding
             using (ApplicationContext db = new ApplicationContext())
             {
