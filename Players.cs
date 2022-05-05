@@ -66,6 +66,43 @@ namespace Tournament
                        
                     }
                 }
+
+            }
+            using (ApplicationContext2 db = new ApplicationContext2())
+            {
+                var players = db.Players.Where(p => p.Team.Name == "Dynamo");
+                foreach(Player player in players)
+                {
+                    richTextBox2.AppendText($"{player.Name} {player.Surname} {player.Role}\n");
+                }
+            }
+            using (ApplicationContext2 db = new ApplicationContext2())
+            {
+                var players = db.Players.Join(db.Teams, u => u.TeamId, c => c.Id,
+                    (u, c) => new
+                    {
+                        Name = u.Name,
+                        Team = c.Name,
+                        Role = u.Role
+                    });
+                foreach(var u in players)
+                {
+                    richTextBox3.AppendText($"{u.Name} ({u.Team}) - {u.Role}\n");
+                }
+            }
+            using (ApplicationContext2 db = new ApplicationContext2())
+            {
+                var groups = from u in db.Players
+                             group u by u.Team.Name into g
+                             select new
+                             {
+                                 g.Key,
+                                 Count = g.Count()
+                             };
+                foreach(var group in groups)
+                {
+                    richTextBox4.AppendText($"{group.Key} {group.Count}\n");
+                }
             }
         }
     }

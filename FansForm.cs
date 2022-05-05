@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tournament
 {
@@ -107,6 +109,10 @@ namespace Tournament
                 }
             }
             dataGridView3.DataSource = table2;
+            /*using (ApplicationContext db = new ApplicationContext())
+            {
+                var JohnTicket = (from ticket in db.Tickets.Include(p => p.FanName) where ticket.TicketNumber = 312 select ticket).Tolist();
+            }*/
         }
 
         private void materialLabel1_Click(object sender, EventArgs e)
