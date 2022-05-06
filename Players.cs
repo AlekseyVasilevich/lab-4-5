@@ -27,6 +27,8 @@ namespace Tournament
 
         private void Players_Load(object sender, EventArgs e)
         {
+            richTextBox1.Visible = false;
+            richTextBox2.Visible = false;
             using (ApplicationContext2 db = new ApplicationContext2())
             {           
                 db.Database.EnsureDeleted();
@@ -68,14 +70,34 @@ namespace Tournament
                 }
 
             }
+            //where
             using (ApplicationContext2 db = new ApplicationContext2())
             {
+                DataTable table1 = new DataTable();
+                table1.Columns.Add("Player Name", typeof(string));
+                table1.Columns.Add("Players Surname", typeof(string));
+                table1.Columns.Add("Role", typeof(string));
                 var players = db.Players.Where(p => p.Team.Name == "Dynamo");
                 foreach(Player player in players)
                 {
-                    richTextBox2.AppendText($"{player.Name} {player.Surname} {player.Role}\n");
+                    table1.Rows.Add(player.Name, player.Surname, player.Role);
                 }
+                dataGridView2.DataSource = table1;
             }
+            using (ApplicationContext2 db = new ApplicationContext2())
+            {
+                DataTable table2 = new DataTable();
+                table2.Columns.Add("Player Name", typeof(string));
+                table2.Columns.Add("Players Surname", typeof(string));
+                table2.Columns.Add("Role", typeof(string));
+                var players = db.Players.Where(p => p.Team.Name == "Manchester");
+                foreach (Player player in players)
+                {
+                    table2.Rows.Add(player.Name, player.Surname, player.Role);
+                }
+                dataGridView3.DataSource = table2;
+            }
+            //join
             using (ApplicationContext2 db = new ApplicationContext2())
             {
                 var players = db.Players.Join(db.Teams, u => u.TeamId, c => c.Id,
@@ -90,6 +112,7 @@ namespace Tournament
                     richTextBox3.AppendText($"{u.Name} ({u.Team}) - {u.Role}\n");
                 }
             }
+            //group
             using (ApplicationContext2 db = new ApplicationContext2())
             {
                 var groups = from u in db.Players
@@ -104,6 +127,11 @@ namespace Tournament
                     richTextBox4.AppendText($"{group.Key} {group.Count}\n");
                 }
             }
+        }
+
+        private void materialLabel2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
